@@ -4,6 +4,7 @@ import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
 import { validateAuth } from "../middlewares/auth";
+import { registeredSuccesfully } from "../utils/emailNodemailer";
 
 const port = process.env.LOCAL_HOST_FRONT;
 
@@ -32,12 +33,9 @@ class UsersControllers {
         if (process.env.NODE_ENV !== "test") {
           // Solo enviar el correo electrónico si no estamos en un entorno de prueba
           const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
-          const info = transporter.sendMail({
-            from: '"Confirmación de correo electrónico" <appboxdelivery.mailing@gmail.com>',
-            to: user.email,
-            subject: "Confirmación de correo ✔",
-            html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para confirmar tu correo:</b><a href="${confirmURL}">${confirmURL}</a>`,
-          });
+          const info = transporter.sendMail(
+            registeredSuccesfully(user, confirmURL)
+          );
           return info.then(() => {
             return res.status(201).send(payload);
           });
