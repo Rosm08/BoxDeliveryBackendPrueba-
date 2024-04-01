@@ -4,7 +4,10 @@ import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
 import { validateAuth } from "../middlewares/auth";
-import { registeredSuccesfully } from "../utils/emailNodemailer";
+import {
+  recoverPassword,
+  registeredSuccesfully,
+} from "../utils/emailNodemailer";
 
 const port = process.env.LOCAL_HOST_FRONT;
 
@@ -216,12 +219,7 @@ class UsersControllers {
             // Genera el link de recuperación de contraseña y lo envía por correo
             const restorePasswordURL = `http://localhost:3001/new-password/${user.token}`;
             return transporter
-              .sendMail({
-                from: '"Recuperación de contraseña" <turnoweb.mailing@gmail.com>',
-                to: user.email,
-                subject: "Recuperación de contraseña ✔",
-                html: `<b>Por favor haz click en el siguiente link, o copia el enlace y pegalo en tu navegador para completar el proceso:</b><a href="${restorePasswordURL}">${restorePasswordURL}</a>`,
-              })
+              .sendMail(recoverPassword(user, restorePasswordURL))
               .then(() => {
                 return res.status(200).send(user.email);
               });
