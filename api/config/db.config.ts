@@ -20,7 +20,7 @@ dotenv.config();
   process.env.POSTGRES_DB_PASSWORD ?? "appbox",
   {
     host: "appboxdelivery.c9o888e04yjc.us-east-2.rds.amazonaws.com",
-    port: 5432,
+    //port: process.env.POSTGRES_DB_DOCKER_PORT,
     dialect: "postgres",
     logging: false,
   }
