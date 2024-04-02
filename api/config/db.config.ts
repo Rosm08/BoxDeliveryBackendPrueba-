@@ -22,7 +22,7 @@ dotenv.config();
     host: "appboxdelivery.c9o888e04yjc.us-east-2.rds.amazonaws.com",
     //port: process.env.POSTGRES_DB_DOCKER_PORT,
     dialect: "postgres",
-    logging: false,
+    logging: true,
   }
 );  
 
