@@ -2,22 +2,22 @@ import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
 
- const db = new Sequelize(
+const db = new Sequelize(
   process.env.POSTGRES_DB_NAME ?? "appbox",
   process.env.POSTGRES_DB_USER ?? "postgres",
-  process.env.POSTGRES_DB_PASSWORD ?? "appboxdelivery",
+  process.env.POSTGRES_DB_PASSWORD ?? "appbox",
   {
     host: "postgres-db",
     //port: process.env.POSTGRES_DB_DOCKER_PORT,
     dialect: "postgres",
     logging: false,
   }
-); 
+);
 
 /*  const db = new Sequelize(
   process.env.POSTGRES_DB_NAME ?? "appbox",
   process.env.POSTGRES_DB_USER ?? "postgres",
-  process.env.POSTGRES_DB_PASSWORD ?? "appbox",
+  process.env.POSTGRES_DB_PASSWORD ?? "appboxdelivery",
   {
     host: "appboxdelivery.c9o888e04yjc.us-east-2.rds.amazonaws.com",
     port: 5432,
