@@ -31,8 +31,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(
   cors({
-    //origin: "http://localhost:3001",
-    origin: "http://3.23.20.217:"+process.env.LOCAL_HOST_FRONT,
+    origin: "http://localhost:3001",
+    //origin: "http://3.23.20.217:"+process.env.LOCAL_HOST_FRONT,
     credentials: true,
   })
 );
