@@ -35,7 +35,7 @@ class UsersControllers {
         // Proceso de envío de correo omitido para entorno de prueba
         if (process.env.NODE_ENV !== "test") {
           // Solo enviar el correo electrónico si no estamos en un entorno de prueba
-          const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
+          const confirmURL = `http://3.23.20.217:${port}/confirm-email/${user.token}`;
           const info = transporter.sendMail(
             registeredSuccesfully(user, confirmURL)
           );
