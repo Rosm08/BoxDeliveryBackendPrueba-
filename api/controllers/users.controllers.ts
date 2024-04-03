@@ -134,7 +134,10 @@ class UsersControllers {
   }
 
   static getUser(req: Request, res: Response) {
-    UsersServices.getUser(parseInt(req.params.id))
+    if (!Number.isInteger(parseInt(req.params.id))) {
+      return res.status(400).send("Id de usuario no válido");
+    }
+    return UsersServices.getUser(parseInt(req.params.id))
       .then((user) => {
         if (!user) return res.sendStatus(204);
         const payload = {
