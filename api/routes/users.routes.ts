@@ -16,6 +16,8 @@ router.post("/register", UsersControllers.registerUser);
 
 router.put("/confirm-email/:token", UsersControllers.confirmEmail);
 
+router.post("/resend-confirmation-email/:token", UsersControllers.resendEmail);
+
 router.post("/login", UsersControllers.loginUser);
 
 router.get("/deliverymen", validateAuthAdmin, UsersControllers.getDeliverymen);
@@ -27,9 +29,6 @@ router.get(
 );
 
 router.get("/single/:id", validateAuthAdmin, UsersControllers.getUser);
-
-//Ruta usada sólo para testeo
-router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 
 router.delete(
   "/delete/deliveryman",
@@ -66,5 +65,6 @@ router.put(
 
 // endpoints for testing
 router.delete("/delete/deliveryman/test", UsersControllers.deleteDeliveryman);
+router.get("/single-by-email/:email", UsersControllers.getUserByEmail);
 
 export default router;

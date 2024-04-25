@@ -1,15 +1,18 @@
 import User from "../models/User.models";
 import { createToken } from "../config/tokens";
 import Package from "../models/Package.models";
+import { transporter } from "../config/mailer.config";
+import { confirmationEmail } from "../utils/emailNodemailer";
 
 type userDataType = {
-  [key: string]: string | boolean | null | number;
+  // [key: string]: string | boolean | null | number;
   id: number;
   email: string;
   name: string;
   last_name: string;
   password: string;
-  profile_photo: string | null;
+  token?: string | null;
+  // profile_photo: string | null;
   is_admin: boolean;
   is_confirmed: boolean;
   is_enabled: boolean;
@@ -20,7 +23,7 @@ type deliverymanWithPackages = {
   email: string;
   name: string;
   last_name: string;
-  profile_photo: string | null;
+  profile_photo?: string | null;
   is_admin: boolean;
   is_confirmed: boolean;
   is_enabled: boolean;
@@ -123,6 +126,17 @@ class UsersServices {
       .catch((err) => {
         throw err;
       });
+  }
+
+  static sendEmailToConfirmAccount(
+    port: string | undefined,
+    user: userDataType
+  ) {
+    // Solo enviar el correo electrónico si no estamos en un entorno de prueba
+    const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
+    //const confirmURL = `http://3.23.20.217:${port}/confirm-email/${user.token}`;
+    const info = transporter.sendMail(confirmationEmail(user, confirmURL));
+    return info;
   }
 
   static confirmEmail(token: string) {
@@ -293,7 +307,6 @@ class UsersServices {
       )
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .then(([_affectedRows, response]) => {
-
           return response;
         })
         .catch((error) => {

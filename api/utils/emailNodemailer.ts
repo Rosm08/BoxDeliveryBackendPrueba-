@@ -3,7 +3,7 @@ type User = {
   email: string;
 };
 
-export const registeredSuccesfully = (user: User, confirmURL: string) => {
+export const confirmationEmail = (user: User, confirmURL: string) => {
   return {
     from: '"Box Delivery App" <appboxdelivery.mailing@gmail.com>',
     to: user.email,
