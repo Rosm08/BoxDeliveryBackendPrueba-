@@ -4,10 +4,7 @@ import User from "../models/User.models";
 import { createToken, verifyToken } from "../config/tokens";
 import { UsersServices } from "../services/users.services";
 import { validateAuth } from "../middlewares/auth";
-import {
-  recoverPassword,
-  registeredSuccesfully,
-} from "../utils/emailNodemailer";
+import { recoverPassword } from "../utils/emailNodemailer";
 
 const port = process.env.LOCAL_HOST_FRONT;
 
@@ -34,15 +31,11 @@ class UsersControllers {
         };
         // Proceso de envío de correo omitido para entorno de prueba
         if (process.env.NODE_ENV !== "test") {
-          // Solo enviar el correo electrónico si no estamos en un entorno de prueba
-          const confirmURL = `http://localhost:${port}/confirm-email/${user.token}`;
-          //const confirmURL = `http://3.23.20.217:${port}/confirm-email/${user.token}`;
-          const info = transporter.sendMail(
-            registeredSuccesfully(user, confirmURL)
+          return UsersServices.sendEmailToConfirmAccount(port, user).then(
+            () => {
+              return res.status(201).send(payload);
+            }
           );
-          return info.then(() => {
-            return res.status(201).send(payload);
-          });
         } else {
           // En un entorno de prueba, simplemente responde con éxito
           return res.status(201).send(payload);
@@ -63,6 +56,19 @@ class UsersControllers {
       .catch(() => {
         res.status(500).send("Error confirming user!");
       });
+  }
+
+  static async resendEmail(req: Request, res: Response) {
+    const { token } = req.params;
+
+    const user = await UsersServices.findOneUserByToken(token);
+    if (!user) return res.sendStatus(500);
+    try {
+      const message = await UsersServices.sendEmailToConfirmAccount(port, user);
+      return res.status(200).send(message);
+    } catch (err) {
+      return res.status(500).send(err);
+    }
   }
 
   static loginUser(req: Request, res: Response) {
