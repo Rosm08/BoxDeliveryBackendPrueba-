@@ -57,6 +57,12 @@ router.put(
 );
 
 router.put(
+  "/reassign/:packageId/:newDeliveryManId",
+  validateAuthAdmin,
+  PackagesControllers.reassign
+);
+
+router.put(
   "/remove-all-assign",
   validateAuth,
   PackagesControllers.removeAllAssigned
