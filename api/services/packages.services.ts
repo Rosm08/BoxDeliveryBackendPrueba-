@@ -179,8 +179,8 @@ class PackagesServices {
       .then((foundPackage) => {
         if (!foundPackage)
           throw new Error("We could not find the package requested");
-        if (foundPackage.user_id === null)
-          throw new Error("El paquete no estaba asigando a este repartidor");
+        // if (foundPackage.user_id === null)
+        //   throw new Error("El paquete no estaba asigando a este repartidor");
         foundPackage.user_id = null;
         return foundPackage.save();
       })
@@ -188,6 +188,24 @@ class PackagesServices {
         throw Error(err);
       });
   }
+
+  static reassign(packageId: string, user_id: number) {
+    return Package.findOne({
+      where: {
+        packageId,
+      },
+    })
+      .then((foundPackage) => {
+        if (!foundPackage) return;
+        foundPackage.user_id = user_id;
+        foundPackage.save();
+        return foundPackage;
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+  }
+
   static removeAllUsersFromPackages() {
     return Package.update(
       {

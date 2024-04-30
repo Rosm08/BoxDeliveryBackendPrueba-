@@ -136,6 +136,20 @@ const PackagesControllers = {
       .then(() =>
         res.status(200).send("The deliverman has been removed from the package")
       )
+      .catch((err) => {
+        if (
+          err.message ===
+          "Error: El paquete no estaba asigando a este repartidor"
+        )
+          return res.status(304).send(err.message);
+        else return res.status(400).send(err.message);
+      });
+  },
+
+  reassign: (req: Request, res: Response) => {
+    const { packageId, userId } = req.params;
+    PackagesServices.reassign(packageId, parseFloat(userId))
+      .then(() => res.status(201).send("Deliveryman updated successfully"))
       .catch((err) => res.status(400).send(err.message));
   },
 
